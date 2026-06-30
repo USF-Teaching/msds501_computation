@@ -9,7 +9,9 @@
 #   - What type of error is it?
 #   - Which line causes it?
 #   - Write a comment below explaining the cause.
-#
+#    This is a value error, an input type missmatch. The line that causes it is the line that tries to convert a string to an integer,
+#    but the string is not a valid integer representation. The error is on line 37
+
 # YOUR TASK (Task 3): Wrap the risky conversion in try/except.
 #   - Catch the specific error type (not bare except:)
 #   - When a bad value is caught, print a message that includes
@@ -28,14 +30,17 @@
 #   Count of valid scores: 4
 # ============================================================
 
-scores = ['88', '95', 'absent', '72', 'n/a', '84']
+scores = [88, '95', 'absent', '72', 'n/a', '84']
 
 valid = []
 
 for i, s in enumerate(scores):
-    score = int(s)            # <-- this line crashes on bad strings
-    print(f'Score [{i}]: {score}')
-    valid.append(score)
+    try:
+        score = int(s)   
+        print(f'Score [{i}]: {score}')
+        valid.append(score)
+    except ValueError:
+        print(f'[index {i}] Skipped bad score: {s}')
 
 print(f'Total of valid scores: {sum(valid)}')
 print(f'Count of valid scores: {len(valid)}')

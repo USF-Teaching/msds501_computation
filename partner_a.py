@@ -32,7 +32,10 @@ readings = ['72.1', '68.5', 'N/A', '74.0', 'sensor_error', '69.3']
 valid = []
 
 for i, r in enumerate(readings):
-    temp = float(r)           # <-- this line crashes on bad strings
+    try:
+        temp = float(r)           # <-- ValueError: string value cannot be converted to a float
+    except ValueError:
+        print(f'[index {i}] Skipped bad reading: {r}')
     print(f'Reading [{i}]: {temp}')
     valid.append(temp)
 
