@@ -35,7 +35,7 @@ for i, r in enumerate(readings):
     try:
         temp = float(r)           # <-- ValueError: string value cannot be converted to a float
     except ValueError:
-        print(f'FAILED on index {i}. BAD VALUE: {r}')
+        print(f'[index {i}] Skipped bad reading: {r}')
     print(f'Reading [{i}]: {temp}')
     valid.append(temp)
 
