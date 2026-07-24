@@ -40,3 +40,18 @@ def test_parse_order_row_valid_row():
 
 
 # --- Your tests go below here ----------------------------------------------
+
+@pytest.mark.parametrize("input_row, pattern_match", [
+    (["1001", "Widget", "4", "9.99"], "expected 5 fields"),
+    (["1001", "Widget1", "Widget2", "4", "9.99", "alice@example.com"], "expected 5 fields"),
+    ([" ", "Widget1", "4", "9.99", "alice@example.com"], "order_id cannot"),
+    (["1001", " ", "4", "9.99", "alice@example.com"], "product cannot"),
+    (["1001", "Widget", "3.6", "9.99", "alice@example.com"], "must be a whole"),
+    (["1001", "Widget", "0", "9.99", "alice@example.com"], "must be positive"),
+    (["1001", "Widget", "-2", "9.99", "alice@example.com"], "must be positive"),
+    (["1001", "Widget", "4", "hello", "alice@example.com"], "must be a number"),
+    (["1001", "Widget", "4", "-9.99", "alice@example.com"], "cannot be negative")
+])
+def test_parse_order_row_invalid_row_raises_valueError(input_row, pattern_match):
+    with pytest.raises(ValueError, match=pattern_match):
+        parse_order_row(input_row)
