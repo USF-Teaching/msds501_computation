@@ -33,6 +33,17 @@ scores = ['88', '95', 'absent', '72', 'n/a', '84']
 
 valid = []
 
+<<<<<<< HEAD
+for i, s in enumerate(scores):
+    try:
+        score = int(s)
+    except ValueError:
+        print(f"[index {i}] Skipped bad score: '{s}'")
+    else:
+        print(f'Score [{i}]: {score}')
+        valid.append(score)
+=======
+>>>>>>> upstream/main
 
 for i, s in enumerate(scores):
     try:
