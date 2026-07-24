@@ -40,3 +40,50 @@ def test_parse_order_row_valid_row():
 
 
 # --- Your tests go below here ----------------------------------------------
+
+@pytest.mark.parametrize(
+    "input_val, expected_context, expected_val",
+    [
+        ([],pytest.raises(ValueError), None),
+        (["", "Widget", "4", "9.99","alice@example.com" ], pytest.raises(ValueError), None),
+        (["1001", "", "4", "9.99","alice@example.com" ], pytest.raises(ValueError), None),
+        (["1001", "Widget", "4.0", "9.99", "alice@example.com"], pytest.raises(ValueError), None),
+        (["1001", "Widget", "-4", "9.99", "alice@example.com"], pytest.raises(ValueError), None),
+        (["1001", "Widget", "4", "-9.99", "alice@example.com"], pytest.raises(ValueError), None),
+        (["1001", "Widget", "1", "0", "alice@example.com"], nullcontext(), {
+            "order_id": "1001",
+            "product": "widget",
+            "quantity": 1,
+            "unit_price": 0.0,
+            "customer_email": "alice@example.com",
+        }),
+    ]
+)
+def test_parse_order_row_invalid_row(input_val,expected_context, expected_val):
+    with expected_context:
+        assert parse_order_row(input_val) == expected_val
+
+def test_compute_line_total():
+    assert compute_line_total({"quantity": 10, "unit_price": 4.50}) == (10*4.5)
+
+def test_top_n_products_invalid_n():
+    with pytest.raises(ValueError):
+        assert top_n_products({}, -1) is None
+def test_top_n_products():
+    products = {
+        "A": {
+            "total_quantity": 5,
+            "total_revenue": 50,   # rounded to 2 decimals
+            "order_count": 10,
+        },
+        "B": {
+            "total_quantity": 16,
+            "total_revenue": 65.5,   # rounded to 2 decimals
+            "order_count": 12,
+        }
+    }
+    assert top_n_products(products, 1) == [("B", {
+            "total_quantity": 16,
+            "total_revenue": 65.5,   # rounded to 2 decimals
+            "order_count": 12,
+        })]
