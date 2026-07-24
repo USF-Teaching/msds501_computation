@@ -55,3 +55,15 @@ def test_parse_order_row_valid_row():
 def test_parse_order_row_invalid_row_raises_valueError(input_row, pattern_match):
     with pytest.raises(ValueError, match=pattern_match):
         parse_order_row(input_row)
+
+
+def test_compute_line_total():
+    order = {
+        "order_id": "1001",
+        "product": "widget",
+        "quantity": 4,
+        "unit_price": 9.99,
+        "customer_email": "alice@example.com",
+    }
+    expected_ret = 39.96
+    assert compute_line_total(order) == expected_ret, "Computed total does not match expected"
