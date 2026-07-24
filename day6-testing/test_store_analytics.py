@@ -40,3 +40,22 @@ def test_parse_order_row_valid_row():
 
 
 # --- Your tests go below here ----------------------------------------------
+def test_parse_order_row_negative_quantity():
+    row = ["1001", "Widget", "-1", "9.99", "alice@example.com"]
+    order = parse_order_row(row)
+    assert order == ValueError
+
+def test_parse_order_row_invalid_email():
+    row = ["1001", "Widget", 4, "9.99", "alice"]
+    order = parse_order_row(row)
+    assert order == {
+        "order_id": "1001",
+        "product": "widget",
+        "quantity": 4,
+        "unit_price": 9.99,
+        "customer_email": "alice",
+    }
+
+def test_loyalty_tier_negative():
+    assert loyalty_tier(-100) == ValueError
+    
